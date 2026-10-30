@@ -21,29 +21,37 @@ Le projet met en pratique :
 La version bonus ajoute notamment des animations, des fantômes, le compteur de
 mouvements et le mode Super Pacman.
 
-## Prérequis
+## Prérequis communs
 
-- macOS ;
-- `clang` ou `cc` ;
+- `git` ;
 - `make` ;
-- Homebrew ;
-- XQuartz, nécessaire pour utiliser la MiniLibX Linux sur macOS.
+- un compilateur C (`cc`, `clang` ou `gcc`) ;
+- une carte au format `.ber`.
 
-### Installer XQuartz
+Le dépôt contient la MiniLibX Linux dans [minilibx-linux](minilibx-linux).
+
+## Installation sur macOS
+
+La MiniLibX Linux fonctionne sur macOS avec XQuartz.
+
+### 1. Installer XQuartz
+
+Avec Homebrew :
 
 ```bash
 brew install --cask xquartz
 ```
 
 Après l'installation, redémarre la session macOS. Si nécessaire, ouvre
-également **XQuartz** depuis `Applications > Utilitaires`, puis vérifie que
-ses fichiers sont disponibles :
+également **XQuartz** depuis `Applications > Utilitaires`.
+
+Tu peux vérifier l'installation avec :
 
 ```bash
 ls /opt/X11/include/X11/Xlib.h
 ```
 
-## Compilation
+### 2. Compiler
 
 Depuis la racine du projet :
 
@@ -57,16 +65,74 @@ Pour compiler la version bonus :
 make bonus
 ```
 
-Pour supprimer les fichiers compilés :
+Le [Makefile](Makefile) est actuellement configuré pour macOS et utilise
+`libmlx_Darwin.a` ainsi que les bibliothèques XQuartz.
+
+## Installation sur Linux
+
+Sur Debian ou Ubuntu, installe les dépendances suivantes :
+
+```bash
+sudo apt update
+sudo apt install build-essential xorg libxext-dev libbsd-dev libx11-dev libxrandr-dev libxrender-dev
+```
+
+Compile ensuite la MiniLibX depuis sa propre commande :
+
+```bash
+make -C minilibx-linux
+```
+
+Sur Linux, la MiniLibX produit `libmlx_Linux.a`. Avant de compiler le projet,
+le [Makefile](Makefile) doit donc utiliser les références Linux suivantes :
+
+```make
+MLX_LIB := $(MLX_DIR)/libmlx_Linux.a
+LDLIBS  := -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm -lz
+```
+
+Une fois le Makefile adapté à Linux :
+
+```bash
+make
+```
+
+Pour compiler la version bonus :
+
+```bash
+make bonus
+```
+
+## Compilation et nettoyage
+
+Depuis la racine du projet :
+
+```bash
+make
+```
+
+Version bonus :
+
+```bash
+make bonus
+```
+
+Supprimer les fichiers objets :
 
 ```bash
 make clean
 ```
 
-Pour supprimer les fichiers compilés, les bibliothèques et les exécutables :
+Supprimer les fichiers objets, les bibliothèques et les exécutables :
 
 ```bash
 make fclean
+```
+
+Recompiler entièrement :
+
+```bash
+make re
 ```
 
 ## Lancement
@@ -134,7 +200,7 @@ Exemple :
 .
 ├── includes/          # Fichiers d'en-tête
 ├── maps/              # Cartes de jeu
-├── minilibx-linux/    # MiniLibX utilisée avec XQuartz
+├── minilibx-linux/    # MiniLibX basée sur X11
 ├── srcs/              # Version obligatoire
 ├── srcs_bonus/        # Version bonus
 └── textures/          # Textures et sprites
