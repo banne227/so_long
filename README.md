@@ -1,86 +1,145 @@
-<!DOCTYPE html>
-<html lang="fr">
+# so_long
 
-<body>
+![Aperçu du jeu](img.png)
 
-<h1>so_long</h1>
+Projet réalisé dans le cadre du cursus de l'école 42.
 
-<p><strong>Projet réalisé dans le cadre du cursus de l’école 42.</strong></p>
+## Présentation
 
-<hr>
+**so_long** est un petit jeu 2D développé en C avec la MiniLibX. Le joueur
+doit parcourir une carte, récupérer tous les collectibles, puis atteindre la
+sortie sans traverser les murs.
 
-<h2>Description</h2>
+Le projet met en pratique :
 
-<p>
-so_long est un projet de création d’un petit jeu en 2D en C, utilisant la MiniLibX.
-Le joueur doit se déplacer dans une map pour collecter tous les objets et atteindre la sortie.
-Ce projet met l’accent sur la gestion des graphismes, des événements et de la logique de jeu.
-</p>
+- la création d'une fenêtre graphique avec la MiniLibX ;
+- la gestion des événements clavier et de la fermeture de la fenêtre ;
+- le parsing et la validation de cartes au format `.ber` ;
+- la vérification de l'accessibilité de la carte par flood fill ;
+- la gestion des collisions, des déplacements et des ressources.
 
-<hr>
+La version bonus ajoute notamment des animations, des fantômes, le compteur de
+mouvements et le mode Super Pacman.
 
-<h2>Résultats et distinctions</h2>
+## Prérequis
 
-<ul>
-  <li>Tous les bonus ont été implémentés</li>
-  <li>Les 3 correcteurs ont attribué la mention <strong>Outstanding Project</strong></li>
-</ul>
+- macOS ;
+- `clang` ou `cc` ;
+- `make` ;
+- Homebrew ;
+- XQuartz, nécessaire pour utiliser la MiniLibX Linux sur macOS.
 
-<hr>
+### Installer XQuartz
 
-<h2>Objectifs pédagogiques</h2>
+```bash
+brew install --cask xquartz
+```
 
-<ul>
-  <li>Comprendre la gestion d’un jeu 2D avec MiniLibX</li>
-  <li>Manipuler des images et gérer les événements clavier</li>
-  <li>Gérer les collisions et la logique du jeu</li>
-  <li>Optimiser l’affichage et la mémoire</li>
-  <li>Respecter la norme de codage 42</li>
-</ul>
+Après l'installation, redémarre la session macOS. Si nécessaire, ouvre
+également **XQuartz** depuis `Applications > Utilitaires`, puis vérifie que
+ses fichiers sont disponibles :
 
-<hr>
+```bash
+ls /opt/X11/include/X11/Xlib.h
+```
 
-<h2>Fonctionnalités</h2>
+## Compilation
 
-<ul>
-  <li>Déplacement du joueur sur une map définie par un fichier</li>
-  <li>Collecte d’objets et suivi du score</li>
-  <li>Gestion de la sortie du jeu</li>
-  <li>Support des bonus : animations, multiples niveaux, affichage du nombre de mouvements</li>
-  <li>Affichage graphique via MiniLibX</li>
-</ul>
+Depuis la racine du projet :
 
-<hr>
-
-<h2>Contraintes du projet</h2>
-
-<ul>
-  <li>Langage : C</li>
-  <li>Utilisation de la MiniLibX</li>
-  <li>Respect strict de la norme 42</li>
-  <li>Gestion correcte de la mémoire et des images</li>
-</ul>
-
-<hr>
-
-<h2>Compilation et exécution</h2>
-
-<pre>
+```bash
 make
-./so_long map.ber
-</pre>
+```
 
-<p>Le programme lance le jeu avec la map spécifiée.</p>
+Pour compiler la version bonus :
 
-<hr>
+```bash
+make bonus
+```
 
-<h2>Remarque</h2>
+Pour supprimer les fichiers compilés :
 
-<p>
-Ce projet démontre la maîtrise de la programmation graphique en C, la gestion d’événements et
-la capacité à produire un projet complet avec toutes les fonctionnalités avancées,
-reconnu par les correcteurs avec la mention Outstanding Project.
-</p>
+```bash
+make clean
+```
 
-</body>
-</html>
+Pour supprimer les fichiers compilés, les bibliothèques et les exécutables :
+
+```bash
+make fclean
+```
+
+## Lancement
+
+Le programme doit recevoir une carte `.ber` en argument :
+
+```bash
+./so_long maps/valid_map/map1.ber
+```
+
+Version bonus :
+
+```bash
+./so_long_bonus maps/valid_map/map1.ber
+```
+
+Des cartes d'exemple sont disponibles dans :
+
+```text
+maps/valid_map/
+maps/invalid_map/
+```
+
+## Contrôles
+
+| Action | Touches |
+| --- | --- |
+| Déplacer vers le haut | `W` ou flèche haut |
+| Déplacer vers le bas | `S` ou flèche bas |
+| Déplacer vers la gauche | `A` ou flèche gauche |
+| Déplacer vers la droite | `D` ou flèche droite |
+| Quitter | `Échap` ou fermer la fenêtre |
+
+## Format d'une carte
+
+Chaque carte doit :
+
+- avoir l'extension `.ber` ;
+- être rectangulaire ;
+- être entourée de murs ;
+- contenir exactement un joueur, une sortie et au moins un collectible ;
+- permettre au joueur d'atteindre tous les collectibles et la sortie.
+
+| Symbole | Signification |
+| --- | --- |
+| `1` | Mur |
+| `0` | Sol |
+| `P` | Position initiale du joueur |
+| `C` | Collectible |
+| `E` | Sortie |
+
+Exemple :
+
+```text
+111111111
+1000C0001
+101111101
+1P0000E01
+111111111
+```
+
+## Arborescence
+
+```text
+.
+├── includes/          # Fichiers d'en-tête
+├── maps/              # Cartes de jeu
+├── minilibx-linux/    # MiniLibX utilisée avec XQuartz
+├── srcs/              # Version obligatoire
+├── srcs_bonus/        # Version bonus
+└── textures/          # Textures et sprites
+```
+
+## Licence
+
+Projet pédagogique réalisé dans le cadre de l'école 42.

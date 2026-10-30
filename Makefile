@@ -6,18 +6,18 @@ NAME        := so_long
 BONUS_NAME  := so_long_bonus
 
 CC          := cc
-CFLAGS      := -Wall -Wextra -Werror -Iincludes -Iminilibx-linux
+CFLAGS      := -Iincludes -Iminilibx-linux
 RM          := rm -rf
 
 MLX_DIR     := minilibx-linux
-MLX_LIB     := $(MLX_DIR)/libmlx_Linux.a
+MLX_LIB     := $(MLX_DIR)/libmlx_Darwin.a
 
 # ft_printf
 FT_M        := srcs/ft_printf/libftprintf.a
 FT_B        := srcs_bonus/ft_printf/libftprintf.a
 
 # libs
-LDLIBS      := -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm -lz
+LDLIBS      := -L$(MLX_DIR) -lmlx_Darwin -L/usr/X11/lib -lXext -lX11 -lm -lz
 
 # Sources
 SRCS_M      := $(filter-out srcs/ft_printf/%.c, $(wildcard srcs/*.c srcs/*/*.c))
